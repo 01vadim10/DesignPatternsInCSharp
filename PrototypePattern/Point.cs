@@ -2,20 +2,21 @@
 
 namespace PrototypePattern
 {
-    public class Point
+    public class Point : IPrototype<Point>
     {
         public int X, Y;
 
-        public Point()
+        public Point(int x, int y)
         {
-            
+            X = x;
+            Y = y;
         }
 
         public override string ToString() => $"{nameof(X)}: {X}\n{nameof(Y)}: {Y}";
 
         public Point DeepCopy()
         {
-            return this.DeepCopy<Point>();
+            return new Point(X, Y);
         }
     }
 }

@@ -2,13 +2,14 @@
 
 namespace PrototypePattern
 {
-    public class Line
+    public class Line : IPrototype<Line>
     {
         public Point Start, End;
 
-        public Line()
+        public Line(Point start, Point end)
         {
-            
+            Start = start;
+            End = end;
         }
 
         public override string ToString()
@@ -18,7 +19,7 @@ namespace PrototypePattern
 
         public Line DeepCopy()
         {
-            return this.DeepCopy<Line>();
+            return new Line(Start.DeepCopy(), End.DeepCopy());
         }
     }
 }

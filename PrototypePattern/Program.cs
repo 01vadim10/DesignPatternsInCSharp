@@ -6,9 +6,9 @@ namespace PrototypePattern
     {
         static void Main(string[] args)
         {
-            var start = new Point {X = 1, Y = 3};
-            var end = new Point {Y = 2, X = 4};
-            var line = new Line {Start = start, End = end};
+            var start = new Point(1, 3);
+            var end = new Point(2, 4);
+            var line = new Line(start, end);
             var line2 = line.DeepCopy();
             line2.Start.X = 8;
 
