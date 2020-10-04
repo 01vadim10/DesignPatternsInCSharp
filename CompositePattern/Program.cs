@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace CompositePattern
     //The Sum() extension method adds up all the values in a list of IValueContainer elements it gets passed.
     //We can have a single value or a set of values.
     //Complete the implementation of the interfaces so that Sum() begins to work correctly.
-    public interface IValueContainer
+    public interface IValueContainer : IEnumerable<int>
     {
 
     }
@@ -18,10 +19,29 @@ namespace CompositePattern
     public class SingleValue : IValueContainer
     {
       public int Value;
+
+      public IEnumerator<int> GetEnumerator()
+      {
+        yield return Value;
+      }
+
+      IEnumerator IEnumerable.GetEnumerator()
+      {
+        yield return Value;
+      }
     }
 
     public class ManyValues : List<int>, IValueContainer
     {
+      public List<int> Values { get; set; }
+
+      IEnumerator<int> IEnumerable<int>.GetEnumerator()
+      {
+        foreach (var value in Values)
+        {
+          yield return value;
+        }
+      }
     }
 
     public static class ExtensionMethods
@@ -40,6 +60,12 @@ namespace CompositePattern
     {
         static void Main(string[] args)
         {
+          var single = new SingleValue {Value = 3};
+          Console.WriteLine($"Single sum: {single.Sum()}");
+
+          var many = new ManyValues { Values = new List<int> {12, 7, 6}};
+          Console.WriteLine($"Single sum: {many.Sum()}");
+          Console.ReadKey();
         }
     }
 }
