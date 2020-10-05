@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompositePattern
 {
@@ -19,29 +17,20 @@ namespace CompositePattern
     public class SingleValue : IValueContainer
     {
       public int Value;
-
       public IEnumerator<int> GetEnumerator()
       {
-        yield return Value;
+          yield return Value;
       }
 
       IEnumerator IEnumerable.GetEnumerator()
       {
-        yield return Value;
+          return GetEnumerator();
       }
     }
 
-    public class ManyValues : List<int>, IValueContainer
+    public class ManyValues : List<IValueContainer>
     {
-      public List<int> Values { get; set; }
-
-      IEnumerator<int> IEnumerable<int>.GetEnumerator()
-      {
-        foreach (var value in Values)
-        {
-          yield return value;
-        }
-      }
+        public List<int> Values;
     }
 
     public static class ExtensionMethods
@@ -63,7 +52,7 @@ namespace CompositePattern
           var single = new SingleValue {Value = 3};
           Console.WriteLine($"Single sum: {single.Sum()}");
 
-          var many = new ManyValues { Values = new List<int> {12, 7, 6}};
+          var many = new ManyValues { Values = new List<int> {12, 6}};
           Console.WriteLine($"Single sum: {many.Sum()}");
           Console.ReadKey();
         }
