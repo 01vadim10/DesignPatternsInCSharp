@@ -28,9 +28,8 @@ namespace CompositePattern
       }
     }
 
-    public class ManyValues : List<IValueContainer>
+    public class ManyValues : List<int>, IValueContainer
     {
-        public List<int> Values;
     }
 
     public static class ExtensionMethods
