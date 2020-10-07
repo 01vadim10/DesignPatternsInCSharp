@@ -51,7 +51,9 @@ namespace CompositePattern
           var single = new SingleValue {Value = 3};
           Console.WriteLine($"Single sum: {single.Sum()}");
 
-          var many = new ManyValues { Values = new List<int> {12, 6}};
+          var many = new ManyValues();
+          many.Add(12);
+          many.Add(6);
           Console.WriteLine($"Single sum: {many.Sum()}");
           Console.ReadKey();
         }

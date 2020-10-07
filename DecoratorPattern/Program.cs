@@ -1,4 +1,6 @@
-﻿namespace DecoratorPattern
+﻿using System;
+
+namespace DecoratorPattern
 {
     public class Bird
     {
@@ -29,7 +31,7 @@
        
         public int Age
         {
-            get => _age;
+            get { return _age;}
             set
             {
                 _age = value;
@@ -38,15 +40,25 @@
             }
         }
 
-        public string Fly() => bird.Fly();
+        public string Fly()
+        {
+            return bird.Fly();
+        }
 
-        public string Crawl() => lizard.Crawl();
+        public string Crawl()
+        {
+            return lizard.Crawl();
+        }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
+            var dragon = new Dragon {Age = 4};
+            Console.WriteLine(dragon.Fly());
+            Console.WriteLine(dragon.Crawl());
+            Console.ReadKey();
         }
     }
 }
