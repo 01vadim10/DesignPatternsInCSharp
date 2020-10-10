@@ -11,7 +11,7 @@ namespace FacadePattern
         public List<int> Generate(int count)
         {
             return Enumerable.Range(0, count)
-                .Select(_ => random.Next(1, 6))
+                .Select(_ => 0)
                 .ToList();
         }
     }
@@ -81,13 +81,57 @@ namespace FacadePattern
     {
         public List<List<int>> Generate(int size)
         {
-            // todo
+            List<List<int>> matrix = new List<List<int>>();
+            var generator = new Generator();
+            var splitter = new Splitter();
+            var verifier = new Verifier();
+
+            for (int i = 0; i < size; i++)
+            {
+                matrix.Add(generator.Generate(size));
+            }
+
+            var poweredSize = Math.Pow(size, 2);
+
+            for (int i = 1, row = 0, column = size / 2; i <= poweredSize; i++)
+            {
+                if (row < 0 && column < size && column > 0)
+                {
+                    row = size - 1;
+                }
+                else if (row >= 0 && row < size && column >= size)
+                {
+                    column = 0;
+                }
+                else if (row <= size && column >= size // outside both a row and a column
+                         || matrix[row][column] > 0) // the cell is already filled
+                {
+                    row += 2;
+                    column--;
+                }
+                matrix[row][column] = i;
+                row--;
+                column++;
+            }
+
+            var splitMatrix = splitter.Split(matrix);
+            if (verifier.Verify(splitMatrix))
+            {
+                return splitMatrix;
+            }
+
+            return null;
         }
     }
+
     class Program
     {
         static void Main(string[] args)
         {
+            var magicSquareGenerator = new MagicSquareGenerator();
+            var magicSquare = magicSquareGenerator.Generate(3);
+            Console.WriteLine(magicSquare);
+            Console.ReadKey();
         }
     }
 }
