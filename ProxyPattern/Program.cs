@@ -22,12 +22,50 @@
 
     public class ResponsiblePerson
     {
+        private Person person;
+
         public ResponsiblePerson(Person person)
         {
-            // todo
+            this.person = person;
         }
 
-        public int Age { /* todo implement property */ }
+        public int Age
+        {
+            get
+            {
+                return person.Age;
+            }
+
+            set
+            {
+                person.Age = value;
+            }
+        }
+
+        public string Drink()
+        {
+            if (Age < 18)
+            {
+                return "too young";
+            }
+
+            return person.Drink();
+        }
+
+        public string Drive()
+        {
+            if (Age < 16)
+            {
+                return "too young";
+            }
+
+            return person.Drive();
+        }
+
+        public string DrinkAndDrive()
+        {
+            return "dead";
+        }
     }
 
     class Program
