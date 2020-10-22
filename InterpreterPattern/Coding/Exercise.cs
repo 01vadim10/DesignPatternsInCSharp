@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using NUnit.Framework;
 
-namespace InterpreterPattern
+namespace InterpreterPattern.Coding
 {
-    /// <summary>
-    /// You are asked to write an expression processor for simple numeric expressions with the following constraints:
-    /// - Expressions use integral values (e.g., '13' ), single-letter variables defined in Variables, as well as + and - operators only
-    /// - There is no need to support braces or any other operations
-    /// - If a variable is not found in Variables (or if we encounter a variable with >1 letter, e.g. ab), the evaluator returns 0 (zero)
-    /// - In case of any parsing failure, evaluator returns 0
-    /// Example:
-    /// Calculate("1+2+3")  should return 6
-    /// Calculate("1+2+xy")  should return 0
-    /// Calculate("10-2-x")  when x=3 is in  should return 5
-    /// </summary>
     public class ExpressionProcessor
     {
         public Dictionary<char, int> Variables = new Dictionary<char, int>();
@@ -52,7 +41,7 @@ namespace InterpreterPattern
                                         result.Add(new Token(Token.Type.Integer, sb.ToString()));
                                         break;
                                     }
-                                } 
+                                }
                             }
                             else
                             {
@@ -62,17 +51,7 @@ namespace InterpreterPattern
                         }
                         else
                         {
-                            bool isValueInVariables = false;
-                            int varValue = 0;
-                            try
-                            {
-                                isValueInVariables = Variables.TryGetValue(input[i], out varValue);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                            if (char.IsLetter(input[i]) && isValueInVariables)
+                            if (char.IsLetter(input[i]) && Variables.TryGetValue(input[i], out var varValue))
                             {
                                 result.Add(new Token(Token.Type.Integer, varValue.ToString()));
                             }
@@ -92,8 +71,8 @@ namespace InterpreterPattern
         public int Calculate(string expression)
         {
             var tokens = Lex(expression);
-            var lastToken = tokens[tokens.Count - 1];
-            if (lastToken.MyType == Token.Type.Unknown)
+
+            if (tokens.LastOrDefault()?.MyType == Token.Type.Unknown)
             {
                 return 0;
             }
@@ -124,7 +103,7 @@ namespace InterpreterPattern
                                     Left = result.Left,
                                     Right = result.Right,
                                     OperationType = result.OperationType
-                                }; 
+                                };
                             }
                         }
                         break;
@@ -160,7 +139,6 @@ namespace InterpreterPattern
     {
         public enum Type
         {
-            None,
             Addition,
             Subtraction
         }
@@ -178,13 +156,6 @@ namespace InterpreterPattern
                         return Left.Value + Right.Value;
                     case Type.Subtraction:
                         return Left.Value - Right.Value;
-                    case Type.None:
-                        if (Left != null)
-                        {
-                            return Left.Value;
-                        }
-
-                        return 0;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -211,37 +182,6 @@ namespace InterpreterPattern
         public override string ToString()
         {
             return $"{Text}";
-        }
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var expressionProcessor = new ExpressionProcessor();
-            expressionProcessor.Variables.Add('x', 3);
-            var result = expressionProcessor.Calculate("1+2+3");
-            var result2 = expressionProcessor.Calculate("1+2+xy");
-            var result3 = expressionProcessor.Calculate("10-2-x");
-        }
-    }
-
-    [TestFixture]
-    public class TestSuite
-    {
-        [Test]
-        public void Test()
-        {
-            var ep = new ExpressionProcessor();
-            ep.Variables.Add('x', 5);
-
-            Assert.That(ep.Calculate("1"), Is.EqualTo(1));
-
-            Assert.That(ep.Calculate("1+2"), Is.EqualTo(3));
-
-            Assert.That(ep.Calculate("1+x"), Is.EqualTo(6));
-
-            Assert.That(ep.Calculate("1+xy"), Is.EqualTo(0));
         }
     }
 }
