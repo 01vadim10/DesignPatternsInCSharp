@@ -24,7 +24,6 @@ namespace IteratorPattern
                 Right = right;
 
                 left.Parent = right.Parent = this;
-                // Parent = this;
             }
 
             public Node<T> GetEnumerator()
