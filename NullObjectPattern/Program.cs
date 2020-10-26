@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace NullObjectPattern
 {
@@ -37,13 +38,55 @@ namespace NullObjectPattern
 
     public class NullLog : ILog
     {
-        // todo
+        private int i;
+        public int RecordLimit
+        {
+            get
+            {
+                return i + 1;
+            }
+        }
+
+        public int RecordCount
+        {
+            get
+            {
+                return i++;
+            }
+            set
+            {
+
+            }
+        }
+
+        public void LogInfo(string message)
+        {
+        }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
+        }
+    }
+
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void SingleCallTest()
+        {
+            var a = new Account(new NullLog());
+            a.SomeOperation();
+        }
+
+        [Test]
+        public void ManyCallsTest()
+        {
+            var a = new Account(new NullLog());
+            for (int i = 0; i < 100; ++i)
+                a.SomeOperation();
         }
     }
 }
